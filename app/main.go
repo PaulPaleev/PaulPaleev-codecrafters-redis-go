@@ -22,7 +22,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		go handlePong(conn)
+		handlePong(conn)
 	}
 }
 
