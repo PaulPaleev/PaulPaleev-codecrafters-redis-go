@@ -61,7 +61,7 @@ func getEchoArg(strReq string) string {
 }
 
 func getEchoAndGetResp(size int, arg string) string {
-	return fmt.Sprintf("%v\r\n%v\r\n", size, arg)
+	return fmt.Sprintf("+%v\r\n%v\r\n", size, arg)
 }
 
 func getPingResp() string {
