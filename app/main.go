@@ -15,18 +15,23 @@ func main() {
 	}
 
 	conn, err := l.Accept()
-	if err != nil {
-		fmt.Println("Error accepting connection: ", err.Error())
-		os.Exit(1)
-	}
 
 	for {
+		if err != nil {
+			fmt.Println("Error accepting connection: ", err.Error())
+			os.Exit(1)
+		}
+
 		handlePong(conn)
 	}
 }
 
 func handlePong(conn net.Conn) {
-	defer conn.Close()
+	//defer conn.Close()
 
-	conn.Write([]byte("+PONG\r\n"))
+	_, err := conn.Write([]byte("+PONG\r\n"))
+	if err != nil {
+		fmt.Println("Error writing connection: ", err.Error())
+		os.Exit(1)
+	}
 }
