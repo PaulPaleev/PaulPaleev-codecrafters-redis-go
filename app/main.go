@@ -33,6 +33,7 @@ func handlePong(conn net.Conn) {
 	for {
 		req := make([]byte, 1024)
 		conn.Read(req)
+		fmt.Println(string(req))
 
 		_, err := conn.Write([]byte("+PONG\r\n"))
 
