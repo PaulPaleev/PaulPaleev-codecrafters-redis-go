@@ -36,8 +36,7 @@ func handlePong(conn net.Conn) {
 		req := make([]byte, 1024)
 		conn.Read(req)
 		strReq := string(req)
-		//comm := getCommand(strReq)
-		if strings.Contains(strReq, "echo") {
+		if strings.Contains(strReq, "ECHO") {
 			size, arg := getEchoArgParams(strReq)
 			_, err = conn.Write([]byte(getEchoResp(size, arg)))
 		} else {
@@ -53,11 +52,6 @@ func handlePong(conn net.Conn) {
 func getEchoResp(size string, arg string) string {
 	return fmt.Sprintf("%v\r\n%v\r\n", size, arg)
 }
-
-// func getCommand(strReq string) string {
-// 	reqType := strings.Split(strReq, "\r\n")[2]
-// 	return strings.ToLower(reqType)
-// }
 
 func getEchoArgParams(strReq string) (string, string) {
 	argLen := strings.Split(strReq, "\r\n")[3]
