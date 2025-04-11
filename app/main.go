@@ -36,9 +36,15 @@ func handlePong(conn net.Conn) {
 		req := make([]byte, 1024)
 		conn.Read(req)
 		strReq := string(req)
+
 		if strings.Contains(strReq, "ECHO") {
 			arg := getEchoArg(strReq)
-			_, err = conn.Write([]byte(getEchoResp(len(arg), arg)))
+			_, err = conn.Write([]byte(getEchoAndGetResp(len(arg), arg)))
+		} else if strings.Contains(strReq, "SET") {
+			_, err = conn.Write([]byte(getSetResp()))
+		} else if strings.Contains(strReq, "GET") {
+			arg := getEchoArg(strReq)
+			_, err = conn.Write([]byte(getEchoAndGetResp(len(arg), arg)))
 		} else {
 			_, err = conn.Write([]byte(getPingResp()))
 		}
@@ -49,15 +55,23 @@ func handlePong(conn net.Conn) {
 	}
 }
 
-func getEchoResp(size int, arg string) string {
-	return fmt.Sprintf("%v\r\n%v\r\n", size, arg)
-}
-
 func getEchoArg(strReq string) string {
 	arg := strings.Split(strReq, "\r\n")[4]
 	return arg
 }
 
+func getEchoAndGetResp(size int, arg string) string {
+	return fmt.Sprintf("%v\r\n%v\r\n", size, arg)
+}
+
 func getPingResp() string {
 	return "+PONG\r\n"
+}
+
+func getSetResp() string {
+	return "+OK\r\n"
+}
+
+func getGetArg(strReq string) string {
+	return ""
 }
