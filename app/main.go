@@ -22,12 +22,12 @@ func main() {
 			os.Exit(1)
 		}
 
-		handlePong(conn)
+		go handlePong(conn)
 	}
 }
 
 func handlePong(conn net.Conn) {
-	//defer conn.Close()
+	defer conn.Close()
 
 	_, err := conn.Write([]byte("+PONG\r\n"))
 	if err != nil {
