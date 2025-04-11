@@ -36,7 +36,8 @@ func handlePong(conn net.Conn) {
 		req := make([]byte, 1024)
 		conn.Read(req)
 		strReq := string(req)
-
+		fmt.Println("REQ: ", strReq)
+		fmt.Println("NOT STR: ", req)
 		comm := getCommand(strReq)
 		fmt.Println("COMM", comm)
 		if comm == "echo" {
