@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -31,11 +32,19 @@ func handlePong(conn net.Conn) {
 	defer conn.Close()
 
 	for {
+		var err error
 		req := make([]byte, 1024)
 		conn.Read(req)
-		fmt.Println("req: ", string(req))
+		strReq := string(req)
+		fmt.Println("req: ", strReq)
 
-		_, err := conn.Write([]byte(getPingResp()))
+		comm := getCommand(strReq)
+		if comm == "echo" {
+			size, arg := getEchoArgParams(strReq)
+			_, err = conn.Write([]byte(getEchoResp(size, arg)))
+		} else {
+			_, err = conn.Write([]byte(getPingResp()))
+		}
 
 		if err != nil {
 			break
@@ -43,8 +52,19 @@ func handlePong(conn net.Conn) {
 	}
 }
 
-func getEchoResp() string {
-	return fmt.Sprintf("")
+func getEchoResp(size string, arg string) string {
+	return fmt.Sprintf("%v\r\n%v\r\n", size, arg)
+}
+
+func getCommand(strReq string) string {
+	reqType := strings.Split(strReq, "\r\n")[1]
+	return strings.ToLower(reqType)
+}
+
+func getEchoArgParams(strReq string) (string, string) {
+	argLen := strings.Split(strReq, "\r\n")[2]
+	arg := strings.Split(strReq, "\r\n")[3]
+	return argLen, arg
 }
 
 func getPingResp() string {
