@@ -27,7 +27,6 @@ func main() {
 }
 
 func handlePong(conn net.Conn) {
-	defer conn.Close()
 
 	mess := make([]byte, 1024)
 	_, err := conn.Read(mess)
