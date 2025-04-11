@@ -20,9 +20,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	handlePong(conn)
+	for {
+		handlePong(conn)
+	}
 }
 
 func handlePong(conn net.Conn) {
+	defer conn.Close()
+
 	conn.Write([]byte("+PONG\r\n"))
 }
