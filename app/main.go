@@ -15,10 +15,9 @@ func main() {
 	}
 
 	defer l.Close()
-	conn, err := l.Accept()
 
 	for {
-
+		conn, err := l.Accept()
 		if err != nil {
 			fmt.Println("Error accepting connection: ", err.Error())
 			os.Exit(1)
@@ -31,11 +30,14 @@ func main() {
 func handlePong(conn net.Conn) {
 	defer conn.Close()
 
-	req := make([]byte, 1024)
-	_, err := conn.Read(req)
+	for {
+		req := make([]byte, 1024)
+		conn.Read(req)
 
-	if err != nil {
-		return
+		_, err := conn.Write([]byte("+PONG\r\n"))
+
+		if err != nil {
+			break
+		}
 	}
-	conn.Write([]byte("+PONG\r\n"))
 }
