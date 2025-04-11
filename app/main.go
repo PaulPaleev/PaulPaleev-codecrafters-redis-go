@@ -38,6 +38,7 @@ func handlePong(conn net.Conn) {
 		strReq := string(req)
 
 		comm := getCommand(strReq)
+		fmt.Println("COMM", comm)
 		if comm == "echo" {
 			size, arg := getEchoArgParams(strReq)
 			_, err = conn.Write([]byte(getEchoResp(size, arg)))
