@@ -29,9 +29,10 @@ func main() {
 func handlePong(conn net.Conn) {
 	defer conn.Close()
 
-	_, err := conn.Write([]byte("+PONG\r\n"))
+	mess := make([]byte, 1024)
+	_, err := conn.Read(mess)
 	if err != nil {
-		fmt.Println("Error writing connection: ", err.Error())
-		os.Exit(1)
+		return
 	}
+	conn.Write([]byte("+PONG\r\n"))
 }
