@@ -33,12 +33,20 @@ func handlePong(conn net.Conn) {
 	for {
 		req := make([]byte, 1024)
 		conn.Read(req)
-		fmt.Println(string(req))
+		fmt.Println("req: ", string(req))
 
-		_, err := conn.Write([]byte("+PONG\r\n"))
+		_, err := conn.Write([]byte(getPingResp()))
 
 		if err != nil {
 			break
 		}
 	}
+}
+
+func getEchoResp() string {
+	return fmt.Sprintf("")
+}
+
+func getPingResp() string {
+	return "+PONG\r\n"
 }
