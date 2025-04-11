@@ -13,10 +13,10 @@ func main() {
 		fmt.Println("Failed to bind to port 6379")
 		os.Exit(1)
 	}
-
-	conn, err := l.Accept()
+	defer l.Close()
 
 	for {
+		conn, err := l.Accept()
 		if err != nil {
 			fmt.Println("Error accepting connection: ", err.Error())
 			os.Exit(1)
@@ -27,9 +27,11 @@ func main() {
 }
 
 func handlePong(conn net.Conn) {
+	defer conn.Close()
 
-	mess := make([]byte, 1024)
-	_, err := conn.Read(mess)
+	req := make([]byte, 1024)
+	_, err := conn.Read(req)
+
 	if err != nil {
 		return
 	}
